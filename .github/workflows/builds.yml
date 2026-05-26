@@ -3,6 +3,9 @@ name: Build Android APK
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,8 +24,12 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
+          cache: true
 
-      - name: Flutter pub get
+      - name: Flutter doctor
+        run: flutter doctor -v
+
+      - name: Install dependencies
         run: flutter pub get
 
       - name: Build APK
@@ -31,5 +38,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: hiddify-apk
+          name: chotko-apk
           path: build/app/outputs/flutter-apk/app-release.apk
